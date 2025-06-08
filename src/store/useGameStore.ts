@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { GameEntry, GameStatus } from "../types/Game";
+import type { SearchResult } from "../components/GameSearchModal/GameSearchModal";
 import {
   loadGames,
   loadIndex,
@@ -10,15 +11,15 @@ import {
 type GameStore = {
   games: GameEntry[];
   currentIndex: number;
-  searchCache: Record<string, GameEntry[]>;
+  searchCache: Record<string, { data: SearchResult[]; timestamp: number }>;
 
   addGame: (game: GameEntry) => void;
   removeGame: (id: string) => void;
   updateStatus: (id: string, status: GameStatus) => void;
   setCurrentIndex: (index: number) => void;
 
-  addSearchResult: (query: string, results: GameEntry[]) => void;
-  getSearchResult: (query: string) => GameEntry[] | null;
+  addSearchResult: (query: string, results: SearchResult[]) => void;
+  getSearchResult: (query: string) => SearchResult[] | null;
 };
 
 let initialGames: GameEntry[] = [];
@@ -35,6 +36,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   searchCache: {},
 
   addGame: (game: GameEntry) => {
+    const existing = get().games.some((g) => g.id === game.id);
+    if (existing) return;
+
     const updated = [...get().games, game];
     saveGames(updated);
     set({ games: updated });
@@ -59,17 +63,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ currentIndex: index });
   },
 
-  addSearchResult: (query: string, results: GameEntry[]) => {
+  addSearchResult: (query: string, results: SearchResult[]) => {
     const normalized = query.toLowerCase();
     set((state) => ({
       searchCache: {
         ...state.searchCache,
-        [normalized]: results,
+        [normalized]: {
+          data: results,
+          timestamp: Date.now(),
+        },
       },
     }));
   },
 
-  getSearchResult: (query: string): GameEntry[] | null => {
-    return get().searchCache[query.toLowerCase()] ?? null;
+  getSearchResult: (query: string): SearchResult[] | null => {
+    const normalized = query.toLowerCase();
+    const cached = get().searchCache[normalized];
+    const now = Date.now();
+
+    if (!cached) return null;
+    if (now - cached.timestamp > 1000 * 60 * 60 * 24) return null; // 24 hours
+
+    return cached.data;
   },
 }));
