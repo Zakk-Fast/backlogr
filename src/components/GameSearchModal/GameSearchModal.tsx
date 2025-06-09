@@ -68,11 +68,8 @@ export default function GameSearchModal({ isOpen, onClose }: Props) {
 
   if (!isOpen) return null;
 
-
-
   return createPortal(
-    <div>
-      <div className={styles["game-search-modal__overlay"]}></div>
+    <div className={styles["game-search-modal__overlay"]}>
       <div className={styles["game-search-modal__modal"]}>
         <div className={styles["game-search-modal__header"]}>
           <h2>Search for a Game</h2>
@@ -137,5 +134,4 @@ export default function GameSearchModal({ isOpen, onClose }: Props) {
     </div>,
     document.body
   );
-
 }

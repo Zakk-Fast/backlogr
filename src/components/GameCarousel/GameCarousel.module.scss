@@ -1,0 +1,53 @@
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+
+  &__arrow {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 2;
+    color: #333;
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+  }
+
+  &__track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    touch-action: pan-y;
+    overflow: visible;
+  }
+
+  &__card {
+    position: absolute;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    will-change: transform, opacity;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+    padding: 1rem;
+    box-sizing: border-box;
+    pointer-events: auto;
+  }
+
+  .empty {
+    text-align: center;
+    font-size: 1.25rem;
+    margin-top: 4rem;
+  }
+}

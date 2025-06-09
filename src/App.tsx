@@ -1,19 +1,44 @@
-// src/App.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GameSearchModal from "./components/GameSearchModal/GameSearchModal";
+import GameCarousel from "./components/GameCarousel/GameCarousel";
+import styles from "./App.module.scss";
 
 export default function App() {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    setIsMobile(mq.matches);
+    const handler = () => setIsMobile(mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>🎮 Backlogr</h1>
-      <button onClick={() => setModalOpen(true)}>➕ Add Game</button>
-
+    <main className={styles.app}>
       <GameSearchModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
       />
+      <div className="header">
+        <h1>🎮 Backlogr</h1>
+      </div>
+      <div className="app__main-content">
+        <GameCarousel />
+        {!isMobile ? (
+          <button
+            className={styles.addDesktop}
+            onClick={() => setModalOpen(true)}
+          >
+            ➕ Add Game
+          </button>
+        ) : (
+          <button className={styles.fab} onClick={() => setModalOpen(true)}>
+            ➕<span className={styles.fab__label}>Add Game</span>
+          </button>
+        )}
+      </div>
     </main>
   );
 }
