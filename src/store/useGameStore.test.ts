@@ -17,10 +17,10 @@ Object.defineProperty(globalThis, "localStorage", {
 const sampleGame: GameEntry = {
   id: "abc123",
   title: "Test Game",
-  platform: "PC",
-  coverImageUrl: "https://test.image",
+  platform: ["PC"],
+  coverImageId: "https://test.image",
   status: "Backlog",
-  addedAt: new Date().toISOString(),
+  addedAt: Date.now(),
 };
 
 describe("useGameStore", () => {
