@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { debounce } from "lodash";
 import { useGameStore } from "../../store/useGameStore";
@@ -31,6 +31,24 @@ export default function GameSearchModal({ isOpen, onClose }: Props) {
 
   const getSearchResult = useGameStore((s) => s.getSearchResult);
   const addSearchResult = useGameStore((s) => s.addSearchResult);
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
 
   const debouncedSearch = useCallback(
     debounce(async (q: string) => {
@@ -70,7 +88,7 @@ export default function GameSearchModal({ isOpen, onClose }: Props) {
 
   return createPortal(
     <div className={styles["game-search-modal__overlay"]}>
-      <div className={styles["game-search-modal__modal"]}>
+      <div ref={modalRef} className={styles["game-search-modal__modal"]}>
         <div className={styles["game-search-modal__header"]}>
           <h2>Search for a Game</h2>
           <button
