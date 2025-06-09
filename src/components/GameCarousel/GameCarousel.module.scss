@@ -1,23 +1,35 @@
 .carousel {
-  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  overflow: hidden;
+  padding-block: 1rem;
+  box-sizing: border-box;
 
-  &__arrow {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    z-index: 2;
-    color: #333;
+  &__filter {
+    margin-bottom: 1.5rem;
 
-    &:disabled {
-      opacity: 0.3;
-      cursor: default;
+    select {
+      padding: 0.5rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-elevation);
+      color: var(--color-text-main);
     }
+
+    :focus {
+      outline: none;
+    }
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 500px;
+    position: relative;
   }
 
   &__track {
@@ -25,8 +37,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    width: 100%;
+    flex: 1;
     touch-action: pan-y;
     overflow: visible;
   }
@@ -39,15 +50,28 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 300px;
+    max-width: 240px;
     padding: 1rem;
     box-sizing: border-box;
-    pointer-events: auto;
+  }
+
+  &__arrow {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--color-primary-light);
+    z-index: 2;
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
   }
 
   .empty {
     text-align: center;
     font-size: 1.25rem;
-    margin-top: 4rem;
+    margin-top: 2rem;
   }
 }

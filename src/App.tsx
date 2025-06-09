@@ -24,18 +24,18 @@ export default function App() {
       <div className="header">
         <h1>🎮 Backlogr</h1>
       </div>
-      <div className="app__main-content">
+      <div className={styles.wrapper}>
         <GameCarousel />
         {!isMobile ? (
           <button
             className={styles.addDesktop}
             onClick={() => setModalOpen(true)}
           >
-            ➕ Add Game
+            + Add Game
           </button>
         ) : (
           <button className={styles.fab} onClick={() => setModalOpen(true)}>
-            ➕<span className={styles.fab__label}>Add Game</span>
+            +
           </button>
         )}
       </div>

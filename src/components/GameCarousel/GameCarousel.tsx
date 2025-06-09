@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import { useGameStore } from "../../store/useGameStore";
 import GameCard from "../GameCard/GameCard";
+import { filterGamesByStatus } from "../../utils/filterGames";
 import styles from "./GameCarousel.module.scss";
+import type { GameStatus } from "../../types/Game";
 
 export default function GameCarousel() {
   const games = useGameStore((s) => s.games);
@@ -10,17 +12,39 @@ export default function GameCarousel() {
   const setCurrentIndex = useGameStore((s) => s.setCurrentIndex);
 
   const [isTouch, setIsTouch] = useState(false);
+  const [filter, setFilter] = useState<
+    "All" | "Backlog" | "Playing" | "Completed" | "Dropped"
+  >("All");
 
   useEffect(() => {
     setIsTouch(window.matchMedia("(pointer: coarse)").matches);
   }, []);
 
+  const filteredGames = filterGamesByStatus(games, filter);
+
+  useEffect(() => {
+    if (currentIndex >= filteredGames.length) {
+      setCurrentIndex(0);
+    }
+  }, [filteredGames.length, currentIndex, setCurrentIndex]);
+  useEffect(() => {
+    const track = document.querySelector(
+      `.${styles.carousel__track}`
+    ) as HTMLElement | null;
+    if (track) {
+      void track.offsetHeight;
+    }
+  }, [filteredGames.length, currentIndex]);
+
   const prev = () => {
+    console.log("prev clicked");
     if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
   };
 
   const next = () => {
-    if (currentIndex < games.length - 1) setCurrentIndex(currentIndex + 1);
+    console.log("next click");
+    if (currentIndex < filteredGames.length - 1)
+      setCurrentIndex(currentIndex + 1);
   };
 
   const swipeHandlers = useSwipeable({
@@ -30,50 +54,64 @@ export default function GameCarousel() {
     preventScrollOnSwipe: true,
   });
 
-  if (games.length === 0) return <p className={styles.empty}>No games yet</p>;
-
   return (
     <div className={styles.carousel}>
-      {!isTouch && (
-        <button
-          onClick={prev}
-          disabled={currentIndex === 0}
-          className={styles.carousel__arrow}
+      <div className={styles.carousel__filter}>
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value as GameStatus | "All")}
         >
-          ◀
-        </button>
-      )}
-
-      <div {...swipeHandlers} className={styles.carousel__track}>
-        {games.map((game, index) => {
-          const offset = index - currentIndex;
-          return (
-            <div
-              key={game.id}
-              className={styles.carousel__card}
-              style={{
-                transform: `translateX(${offset * 100}%) scale(${
-                  offset === 0 ? 1 : 0.85
-                })`,
-                zIndex: games.length - Math.abs(offset),
-                opacity: offset < -2 || offset > 2 ? 0 : 1,
-              }}
-            >
-              <GameCard game={game} />
-            </div>
-          );
-        })}
+          <option value="All">All</option>
+          <option value="Backlog">Backlog</option>
+          <option value="Playing">Playing</option>
+          <option value="Completed">Completed</option>
+          <option value="Dropped">Dropped</option>
+        </select>
       </div>
 
-      {!isTouch && (
-        <button
-          onClick={next}
-          disabled={currentIndex === games.length - 1}
-          className={styles.carousel__arrow}
-        >
-          ▶
-        </button>
-      )}
+      <div className={styles.carousel__content}>
+        {!isTouch && (
+          <button
+            onClick={prev}
+            disabled={currentIndex === 0}
+            className={styles.carousel__arrow}
+          >
+            ◀
+          </button>
+        )}
+
+        <div {...swipeHandlers} className={styles.carousel__track}>
+          {filteredGames.map((game, index) => {
+            const offset = index - currentIndex;
+            return (
+              <div
+                key={game.id}
+                className={styles.carousel__card}
+                style={{
+                  transform: `translateX(${offset * 100}%) scale(${
+                    offset === 0 ? 1 : 0.85
+                  })`,
+                  zIndex: filteredGames.length - Math.abs(offset),
+                  opacity: offset < -2 || offset > 2 ? 0 : 1,
+                  pointerEvents: offset === 0 ? "auto" : "none",
+                }}
+              >
+                <GameCard game={game} />
+              </div>
+            );
+          })}
+        </div>
+
+        {!isTouch && (
+          <button
+            onClick={next}
+            disabled={currentIndex === filteredGames.length - 1}
+            className={styles.carousel__arrow}
+          >
+            ▶
+          </button>
+        )}
+      </div>
     </div>
   );
 }
