@@ -81,25 +81,35 @@ export default function GameCarousel() {
         )}
 
         <div {...swipeHandlers} className={styles.carousel__track}>
-          {filteredGames.map((game, index) => {
-            const offset = index - currentIndex;
-            return (
-              <div
-                key={game.id}
-                className={styles.carousel__card}
-                style={{
-                  transform: `translateX(${offset * 100}%) scale(${
-                    offset === 0 ? 1 : 0.85
-                  })`,
-                  zIndex: filteredGames.length - Math.abs(offset),
-                  opacity: offset < -2 || offset > 2 ? 0 : 1,
-                  pointerEvents: offset === 0 ? "auto" : "none",
-                }}
-              >
-                <GameCard game={game} />
-              </div>
-            );
-          })}
+          {games.length === 0 ? (
+            <div className={styles.empty}>
+              Your backlog is empty. Start adding some games!
+            </div>
+          ) : filteredGames.length === 0 ? (
+            <div className={styles.empty}>
+              No games found matching that filter.
+            </div>
+          ) : (
+            filteredGames.map((game, index) => {
+              const offset = index - currentIndex;
+              return (
+                <div
+                  key={game.id}
+                  className={styles.carousel__card}
+                  style={{
+                    transform: `translateX(${offset * 100}%) scale(${
+                      offset === 0 ? 1 : 0.85
+                    })`,
+                    zIndex: filteredGames.length - Math.abs(offset),
+                    opacity: offset < -2 || offset > 2 ? 0 : 1,
+                    pointerEvents: offset === 0 ? "auto" : "none",
+                  }}
+                >
+                  <GameCard game={game} />
+                </div>
+              );
+            })
+          )}
         </div>
 
         {!isTouch && (
