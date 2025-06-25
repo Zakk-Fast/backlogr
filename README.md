@@ -1,64 +1,76 @@
-### 🎮 Backlogr
+# 🎮 Backlogr
 
-Track your gaming backlog, swipe-style.
+**Backlogr** is a sleek, swipe-based game backlog tracker for managing what you’re playing, have played, or plan to play. Built to feel great on mobile, it combines a minimal UI with powerful game search powered by the IGDB API. Whether you're juggling retro ROMs or next-gen releases, Backlogr helps you stay focused—and finish more games.
 
-Backlogr is a mobile-friendly web app for managing your personal game library. Add games, organize them by status, and swipe through your collection one card at a time. Built for simplicity and joy — no logins, no bloat.
+---
 
-### Why It Exists
+## 🕹 Features
 
-Every gamer has a backlog — and most backlog tools are overkill. Backlogr strips it down to the essentials: a swipeable, categorized collection you can manage in seconds.
+- **Mobile-First Swipe Interface**  
+  Swipe through full-screen game cards to update status (Playing, Completed, Backlog, Dropped).
 
-It’s a fast, local-first app with a clean UI and zero distractions.
+- **Add Games via IGDB Search**  
+  Search by title and instantly add game metadata including cover art, platform, and release info.
 
-### Features
+- **Game Status Filters**  
+  Easily browse only what you’re currently playing, completed titles, or your full wishlist.
 
-- Add games via IGDB search (powered by a secure backend proxy)
+- **Persistent Local Storage**  
+  All game data is stored in `localStorage`, so your list is always saved—even offline.
 
-- Filter by Backlog, Playing, Completed, or Dropped
+- **Fast, Minimal UX**  
+  Built with speed and simplicity in mind. No logins, no clutter—just your games.
 
-- Swipe navigation on mobile, button controls on desktop
+---
 
-- LocalStorage persistence (no login needed)
+## 🖼️Screenshots
+![Screenshot 2025-06-25 124655](https://github.com/user-attachments/assets/57de031d-9434-4142-aa24-c10116da169c)
+![Screenshot 2025-06-25 124655](https://github.com/user-attachments/assets/57de031d-9434-4142-aa24-c10116da169c)
+![Screenshot 2025-06-25 124643](https://github.com/user-attachments/assets/ba927ad4-994a-43b8-b8e9-8244e9635ab4)
+![Screenshot 2025-06-25 124643](https://github.com/user-attachments/assets/ba927ad4-994a-43b8-b8e9-8244e9635ab4)
+![Screenshot 2025-06-25 124634](https://github.com/user-attachments/assets/cc9544b7-a5a2-4256-bc57-e3a5e048ce29)
+![Screenshot 2025-06-25 124634](https://github.com/user-attachments/assets/cc9544b7-a5a2-4256-bc57-e3a5e048ce29)
 
-- Status and date tracking for each entry
 
-- Cover art via IGDB
 
-### Tech Stack
+---
 
-- Frontend: React + Vite + TypeScript
+## 🛠 Tech Stack
 
-- State Management: Zustand
+| Area            | Tools / Frameworks                        |
+|-----------------|-------------------------------------------|
+| Frontend        | React, TypeScript, SCSS Modules           |
+| State Management| Zustand (lightweight, reactive)           |
+| Backend         | AWS Lambda + API Gateway (IGDB proxy)     |
+| API             | IGDB (via Twitch OAuth)                   |
+| Storage         | `localStorage` for user persistence       |
+| Deployment      | Vercel                                     |
 
-- Styling: SCSS Modules (Mobile-first design)
+---
 
-- Backend: Node + AWS Lambda proxy for IGDB API
+## 📱 UX Flow
 
-- Persistence: LocalStorage
+1. **Search & Add Games**  
+   Use the “+” button to search IGDB and add games to your backlog.
 
-### Deployed At
+2. **Swipe Through Cards**  
+   View each game full-screen. Tap to cycle statuses or swipe to reorder.
 
-https://backlogr.vercel.app/
+3. **Filter by Status**  
+   Use the bottom nav to show only what you're currently playing or plan to play.
 
-### Coming Features
+---
 
-A few ideas queued up for future polish:
+## 🧪 Planned Features
+- Drag-to-reorder within status filters  
+- Social features: shareable backlogs or recommendations  
 
-- In-list search to quickly find a specific game
+---
 
-- Estimated time-to-beat integration
-
-- Stats breakdown by status (e.g. % completed)
-
-- Shuffle and random game picker
-
-- Notes or personal ratings per game
-
-### Get Started
+## 🚀 Getting Started
 
 ```bash
-git clone https://github.com/zakkfast/backlogr
+git clone https://github.com/Zakk-Fast/backlogr.git
 cd backlogr
 npm install
 npm run dev
-```
